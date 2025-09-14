@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- PWA Meta Tags -->
+    <meta name="application-name" content="Tutor ICT España" />
+    <meta name="description" content="Aplicación web progresiva para estudiar el Reglamento ICT de España. Incluye temario completo, preguntas de práctica, simulacros de examen y plan de estudio personalizado." />
+    <meta name="keywords" content="ICT, reglamento, telecomunicaciones, España, estudio, examen, tutor, PWA" />
+    <meta name="author" content="Tutor ICT España" />
+    <meta name="robots" content="index, follow" />
+    
+    <!-- Theme and Display -->
+    <meta name="theme-color" content="#3b82f6" />
+    <meta name="background-color" content="#ffffff" />
+    <meta name="display" content="standalone" />
+    <meta name="orientation" content="portrait-primary" />
+    
+    <!-- Apple PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Tutor ICT" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    
+    <!-- Microsoft PWA Meta Tags -->
+    <meta name="msapplication-TileColor" content="#3b82f6" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Tutor ICT España - Reglamento de Telecomunicaciones" />
+    <meta property="og:description" content="Estudia el Reglamento ICT de España con nuestra aplicación web progresiva. Temario completo, preguntas de práctica y simulacros de examen." />
+    <meta property="og:image" content="/icon-512x512.png" />
+    <meta property="og:url" content="/" />
+    <meta property="og:site_name" content="Tutor ICT España" />
+    <meta property="og:locale" content="es_ES" />
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Tutor ICT España" />
+    <meta name="twitter:description" content="Aplicación web progresiva para estudiar el Reglamento ICT de España" />
+    <meta name="twitter:image" content="/icon-512x512.png" />
+    
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/icon-512x512.png" />
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="/src/main.jsx" as="script" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin" />
+    
+    <title>Tutor ICT España - Reglamento de Telecomunicaciones</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    
+    <!-- Service Worker Registration -->
+    <script>
+      // Registrar Service Worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(registration => {
+              console.log('SW registered: ', registration);
+              
+              // Manejar actualizaciones del SW
+              registration.addEventListener('updatefound', () => {
+                const newWorker = registration.installing;
+                newWorker.addEventListener('statechange', () => {
+                  if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                    // Nueva versión disponible
+                    if (confirm('Nueva versión disponible. ¿Deseas actualizar?')) {
+                      newWorker.postMessage({ type: 'SKIP_WAITING' });
+                      window.location.reload();
+                    }
+                  }
+                });
+              });
+            })
+            .catch(registrationError => {
+              console.log('SW registration failed: ', registrationError);
+            });
+        });
+      }
+      
+      // Manejar instalación de PWA
+      let deferredPrompt;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        
+        // Mostrar botón de instalación personalizado
+        const installButton = document.createElement('button');
+        installButton.textContent = 'Instalar App';
+        installButton.style.cssText = `
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          z-index: 1000;
+          background: #3b82f6;
+          color: white;
+          border: none;
+          padding: 12px 24px;
+          border-radius: 8px;
+          font-weight: 500;
+          cursor: pointer;
+          box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+          transition: all 0.2s;
+        `;
+        
+        installButton.addEventListener('mouseenter', () => {
+          installButton.style.transform = 'translateY(-2px)';
+          installButton.style.boxShadow = '0 6px 16px rgba(59, 130, 246, 0.4)';
+        });
+        
+        installButton.addEventListener('mouseleave', () => {
+          installButton.style.transform = 'translateY(0)';
+          installButton.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.3)';
+        });
+        
+        installButton.addEventListener('click', () => {
+          installButton.style.display = 'none';
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+              console.log('User accepted the install prompt');
+            } else {
+              console.log('User dismissed the install prompt');
+            }
+            deferredPrompt = null;
+          });
+        });
+        
+        document.body.appendChild(installButton);
+        
+        // Ocultar después de 10 segundos si no se usa
+        setTimeout(() => {
+          if (installButton.parentNode) {
+            installButton.style.opacity = '0';
+            setTimeout(() => {
+              if (installButton.parentNode) {
+                installButton.remove();
+              }
+            }, 300);
+          }
+        }, 10000);
+      });
+      
+      // Manejar instalación exitosa
+      window.addEventListener('appinstalled', (evt) => {
+        console.log('App was installed successfully');
+        // Opcional: enviar analytics o mostrar mensaje de bienvenida
+      });
+      
+      // Detectar si la app se está ejecutando como PWA
+      window.addEventListener('DOMContentLoaded', () => {
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+                           window.navigator.standalone === true;
+        
+        if (isStandalone) {
+          document.body.classList.add('pwa-mode');
+          console.log('Running as PWA');
+        }
+      });
+    </script>
+    
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+

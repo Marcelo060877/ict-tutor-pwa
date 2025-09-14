@@ -1,0 +1,107 @@
+{
+  "name": "Tutor ICT España - Reglamento de Telecomunicaciones",
+  "short_name": "Tutor ICT",
+  "description": "Aplicación web progresiva para estudiar el Reglamento ICT de España. Incluye temario completo, preguntas de práctica, simulacros de examen y plan de estudio personalizado.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "es",
+  "categories": ["education", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Dashboard principal con estadísticas de progreso"
+    },
+    {
+      "src": "/screenshot-narrow.png",
+      "sizes": "640x1136",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Vista móvil del temario y preguntas"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Continuar Estudiando",
+      "short_name": "Estudiar",
+      "description": "Continúa con tu plan de estudio personalizado",
+      "url": "/temario",
+      "icons": [
+        {
+          "src": "/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Practicar Preguntas",
+      "short_name": "Preguntas",
+      "description": "Practica con preguntas del reglamento ICT",
+      "url": "/preguntas",
+      "icons": [
+        {
+          "src": "/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Simulacro de Examen",
+      "short_name": "Simulacro",
+      "description": "Realiza un simulacro de examen completo",
+      "url": "/simulacro",
+      "icons": [
+        {
+          "src": "/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Consultar Glosario",
+      "short_name": "Glosario",
+      "description": "Busca términos técnicos del ICT",
+      "url": "/glosario",
+      "icons": [
+        {
+          "src": "/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  }
+}
+
